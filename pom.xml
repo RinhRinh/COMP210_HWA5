@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>edu.unc.comp210</groupId>
+  <artifactId>a05-shakespeare-words</artifactId>
+  <version>1.0</version>
+  <packaging>jar</packaging>
+  <name>COMP210 A5 Shakespeare Words</name>
+
+  <properties>
+    <maven.compiler.release>17</maven.compiler.release>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <exec.mainClass>comp210.a5.ShakespeareWords</exec.mainClass>
+  </properties>
+
+  <!--
+    BRIDGES is not published to Maven Central. JitPack builds it straight from
+    the BridgesUNCC GitHub repo, which is why this extra repository is here.
+  -->
+  <repositories>
+    <repository>
+      <id>jitpack.io</id>
+      <url>https://jitpack.io</url>
+    </repository>
+  </repositories>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.github.BridgesUNCC</groupId>
+      <artifactId>bridges-java</artifactId>
+      <version>3.4.3</version>
+      <exclusions>
+        <!--
+          BRIDGES is built with Gradle and asks for guava "16+", which is a
+          Gradle-only version range. Maven cannot read it, so we drop it here
+          and pin a real version below.
+        -->
+        <exclusion>
+          <groupId>com.google.guava</groupId>
+          <artifactId>guava</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>33.4.8-jre</version>
+    </dependency>
+
+    <!-- Reads the key/value pairs out of your .env file. -->
+    <dependency>
+      <groupId>io.github.cdimascio</groupId>
+      <artifactId>dotenv-java</artifactId>
+      <version>3.2.0</version>
+    </dependency>
+
+    <!-- Runs the starter tests in src/test. -->
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>5.10.2</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.2.5</version>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>3.5.0</version>
+        <configuration>
+          <mainClass>${exec.mainClass}</mainClass>
+          <systemProperties>
+            <!-- Lets the program find .env from any launch directory. -->
+            <systemProperty>
+              <key>dotenv.dir</key>
+              <value>${project.basedir}</value>
+            </systemProperty>
+          </systemProperties>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>

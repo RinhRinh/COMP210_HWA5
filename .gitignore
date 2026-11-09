@@ -1,0 +1,13 @@
+# Your API key lives here. Never commit it.
+.env
+
+# Maven build output
+target/
+
+# IDE noise
+.idea/
+*.iml
+.vscode/
+.classpath
+.project
+.settings/
